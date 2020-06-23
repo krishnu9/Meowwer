@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>Welcome to MEOWWER!</h3>
+<div id="meowws">
+    to be replaced
+</div>
+
+<script>
+    const meowwsElement = document.getElementById("meowws")
+    meowwsElement.innerHTML = 'Loading...'
+
+    const xhr = new XMLHttpRequest()
+    const method = 'GET'
+    const url = "/meowws"
+    const responseType = "json"
+    function handleDidLike(meoww_id, currentCount) {
+
+    }
+    function LikeBtn(meoww) {
+        return "<button class='btn btn-primary' onclick=handleDidLike(meoww.id, meoww.likes)>Like</button>"
+    }
+    function formatMeowwElement(meoww) {
+        var formattedMeoww = "<div class='mb-4 tweet' id='tweet-" + meoww.id + "'>" + "<p>" + meoww.content + LikeBtn(meoww) + "</p></div>"
+        return formattedMeoww
+    }
+    xhr.responseType = responseType
+    xhr.open(method, url)
+    xhr.onload = function () {
+        const serverResponse = xhr.response
+        var listedItems = serverResponse.response
+        var finalMeowwStr = ""
+        var i
+        for (i = 0; i < listedItems.length; i++) {
+            var meowwObj = listedItems[i]
+            var currentItem = formatMeowwElement(meowwObj)
+            finalMeowwStr += currentItem
+        }
+        meowwsElement.innerHTML = finalMeowwStr
+    }
+    xhr.send()
+
+</script>
+
+{% endblock content %}

@@ -26,7 +26,7 @@
 
     const meowwCreateElement = document.getElementById('meoww-create-form')
     meowwCreateElement.addEventListener("submit", handleCreateFormDidSubmit)
-    const meowwsEl = document.getElementById("meowws")
+    const meowwsContainerElement = document.getElementById("meowws")
 
     function handleCreateFormDidSubmit(event) {
         event.preventDefault()
@@ -35,16 +35,20 @@
         const url = myForm.getAttribute("action")
         const method = myForm.getAttribute("method")
         const xhr = new XMLHttpRequest()
+        const responseType = "json"
+        xhr.responseType = responseType
         // console.log(event);
         xhr.open(method, url);
         xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest");
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xhr.onload = function () {
-            const serverResponse = xhr.response
-            // serverResponse = html returned
-            console.log(xhr.status, xhr.response)
-            const meowwsEl = document.getElementById("meowws")
-            loadMeowws(meowwsEl)
+            if (xhr.status === 201) {
+                const newMeowwJson = xhr.response
+                // const newMeowwJson = JSON.parse(newMeoww)
+                console.log(newMeowwJson.likes);
+                const newMeowwElement = formatMeowwElement(newMeowwJson)
+                console.log(newMeowwElement)
+            }
         }
         xhr.send(myformData)
     }
@@ -71,7 +75,7 @@
         xhr.send()
     }
 
-    loadMeowws(meowwsEl)
+    loadMeowws(meowwsContainerElement)
 
     function handleDidLike(meoww_id, currentCount) {
         console.log(meoww_id, currentCount);

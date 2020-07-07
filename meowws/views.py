@@ -11,9 +11,13 @@ ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
 
 def meoww_list_view(request, *args, **kwargs):
+    """
+    REST API VIEW
+    Consume by JS or any frontend (iOS/Android)
+    Return JSON Data
+    """
     qs = Meoww.objects.all()
-    meoww_list = [{"id": x.id, "content": x.content,
-                   "likes": random.randint(0, 200)} for x in qs]
+    meoww_list = [x.serialize() for x in qs]
     data = {
         "response": meoww_list
     }
@@ -29,7 +33,7 @@ def meoww_create_view(request, *args, **kwargs):
         obj = form.save(commit=False)
         obj.save()
         if request.is_ajax():
-            return JsonResponse({}, status=201)
+            return JsonResponse(obj.serialize(), status=201)
         if next_url != None and is_safe_url(next_url, ALLOWED_HOSTS):
             return redirect(next_url)
         form = MeowwForm()

@@ -25,7 +25,7 @@ SECRET_KEY = 'emo-o2=74p^2ulft^=tbblgg9d^(2u2$@wzaozm6e+lq602!q*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition

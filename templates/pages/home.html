@@ -12,7 +12,7 @@
         <form class="form" id="meoww-create-form" method="POST" action="/create-meoww">
             {%csrf_token%}
             <input type="hidden" name="next" value="/">
-            <textarea name="content" class="form-control" placeholder="Your Content"></textarea>
+            <textarea required='required' name="content" class="form-control" placeholder="Your Content"></textarea>
             <button type="submit" class="btn btn-primary">Meoww</button>
         </form>
     </div>
@@ -45,9 +45,12 @@
             if (xhr.status === 201) {
                 const newMeowwJson = xhr.response
                 // const newMeowwJson = JSON.parse(newMeoww)
-                console.log(newMeowwJson.likes);
+                console.log(newMeowwJson.likes)
                 const newMeowwElement = formatMeowwElement(newMeowwJson)
                 console.log(newMeowwElement)
+                const ogHTML = meowwsContainerElement.innerHTML
+                meowwsContainerElement.innerHTML = newMeowwElement + ogHTML
+                myForm.reset()
             }
         }
         xhr.send(myformData)

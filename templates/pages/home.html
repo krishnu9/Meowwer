@@ -51,7 +51,15 @@
                 const ogHTML = meowwsContainerElement.innerHTML
                 meowwsContainerElement.innerHTML = newMeowwElement + ogHTML
                 myForm.reset()
+            } else if(xhr.status === 400) {
+                const errorJSON = xhr.response
+                console.log(errorJSON)
+            } else if(xhr.status === 500) {
+                alert("There was a server error.")
             }
+        }
+        xhr.onerror = function() {
+            alert("An error occurred, Please try again later!")
         }
         xhr.send(myformData)
     }

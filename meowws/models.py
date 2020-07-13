@@ -1,11 +1,19 @@
 from django.db import models
+from django.conf import settings
 import random
+
+User = settings.AUTH_USER_MODEL
 
 
 class Meoww(models.Model):
     # id = models.AutoField(primary_key=True)
+    # A User can have many tweets
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField(blank=True, null=True)
     image = models.FileField(upload_to='images/', blank=True, null=True)
+
+    def __str__(self):
+        return self.content
 
     class Meta:
         ordering = ['-id']

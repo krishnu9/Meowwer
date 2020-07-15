@@ -59,7 +59,7 @@
                 // const newMeowwJson = JSON.parse(newMeoww)
                 console.log(newMeowwJson.likes)
                 const newMeowwElement = formatMeowwElement(newMeowwJson)
-                console.log(newMeowwElement)
+                // console.log(newMeowwElement)
                 const ogHTML = meowwsContainerElement.innerHTML
                 meowwsContainerElement.innerHTML = newMeowwElement + ogHTML
                 myForm.reset()
@@ -97,7 +97,7 @@
         xhr.open(method, url)
         xhr.onload = function () {
             const serverResponse = xhr.response
-            var listedItems = serverResponse.response
+            var listedItems = serverResponse
             var finalMeowwStr = ""
             var i
             for (i = 0; i < listedItems.length; i++) {

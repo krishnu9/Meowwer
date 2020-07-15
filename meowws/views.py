@@ -3,6 +3,8 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.utils.http import is_safe_url
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from .forms import MeowwForm
 from .models import Meoww
 from .serializers import MeowwSerializer
@@ -11,7 +13,7 @@ from .serializers import MeowwSerializer
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
 
-def meoww_list_view(request, *args, **kwargs):
+def meoww_list_view_old(request, *args, **kwargs):
     """
     REST API VIEW
     Consume by JS or any frontend (iOS/Android)
@@ -25,12 +27,30 @@ def meoww_list_view(request, *args, **kwargs):
     return JsonResponse(data)
 
 
+@api_view(['GET'])
+def meoww_list_view(request, *args, **kwargs):
+    qs = Meoww.objects.all()
+    serializer = MeowwSerializer(qs, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def meoww_detail_view(request, meoww_id, *args, **kwargs):
+    qs = Meoww.objects.filter(id=meoww_id)
+    if not qs.exists():
+        return Response({}, status=404)
+    obj = qs.first()
+    serializer = MeowwSerializer(obj)
+    return Response(serializer.data, status=200)
+
+
+@api_view(['POST'])
 def meoww_create_view(request, *args, **kwargs):
-    serializer = MeowwSerializer(data=request.POST or None)
-    if serializer.is_valid():
-        obj = serializer.save(user=request.user)
-        return JsonResponse(serializer.data, status=201)
-    return JsonResponse({}, status=400)
+    serializer = MeowwSerializer(data=request.POST)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=201)
+    return Response({}, status=400)
 
 
 def meoww_create_view_old(request, *args, **kwargs):
@@ -67,7 +87,7 @@ def home_view(request, *args, **kwargs):
     return render(request, "pages/home.html", context={}, status=200)
 
 
-def meoww_detail_view(request, meoww_id, *args, **kwargs):
+def meoww_detail_view_old(request, meoww_id, *args, **kwargs):
     data = {
         "id": meoww_id,
     }

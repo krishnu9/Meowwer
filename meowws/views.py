@@ -4,7 +4,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.utils.http import is_safe_url
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from .forms import MeowwForm
 from .models import Meoww
 from .serializers import MeowwSerializer
@@ -45,6 +47,8 @@ def meoww_detail_view(request, meoww_id, *args, **kwargs):
 
 
 @api_view(['POST'])
+# @authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
 def meoww_create_view(request, *args, **kwargs):
     serializer = MeowwSerializer(data=request.POST)
     if serializer.is_valid(raise_exception=True):

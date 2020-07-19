@@ -46,6 +46,20 @@ def meoww_detail_view(request, meoww_id, *args, **kwargs):
     return Response(serializer.data, status=200)
 
 
+@api_view(['GET', 'DELETE', 'POST'])
+@permission_classes([IsAuthenticated])
+def meoww_delete_view(request, meoww_id, *args, **kwargs):
+    qs = Meoww.objects.filter(id=meoww_id)
+    if not qs.exists():
+        return Response({}, status=404)
+    qs = qs.filter(user=request.user)
+    if not qs.exists():
+        return Response({"message": "You cannot delete this tweet"}, status=401)
+    obj = qs.first()
+    obj.delete()
+    return Response({"message": "Tweet removed!"}, status=200)
+
+
 @api_view(['POST'])
 # @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])

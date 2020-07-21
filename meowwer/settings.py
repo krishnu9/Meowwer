@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 LOGIN_URL = '/login'
 MAX_MEOWW_LENGTH = 240
+MEOWW_ACTION_OPTION = ["like", "unlike", "remeoww"]
 
 # Application definition
 

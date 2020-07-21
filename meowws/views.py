@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 from .forms import MeowwForm
 from .models import Meoww
-from .serializers import MeowwSerializer
+from .serializers import MeowwSerializer, MeowwActionSerializer
 # Create your views here.
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
@@ -57,6 +57,32 @@ def meoww_delete_view(request, meoww_id, *args, **kwargs):
         return Response({"message": "You cannot delete this tweet"}, status=401)
     obj = qs.first()
     obj.delete()
+    return Response({"message": "Tweet removed!"}, status=200)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def meoww_action_view(request, meoww_id, *args, **kwargs):
+    '''
+    id required
+    action options: like, unlike, retweet
+    '''
+    serializer = MeowwActionSerializer(request.POST)
+    if serializer.is_valid(raise_exception=True):
+        data = serializer.validated_data
+        meoww_id = data.get("id")
+        action = data.get("action")
+
+        qs = Meoww.objects.filter(id=meoww_id)
+        if not qs.exists():
+            return Response({}, status=404)
+        obj = qs.first()
+        if action == "like":
+            obj.likes.add(request.user)
+        elif action == "unlike":
+            obj.likes.remove(request.user)
+        elif action == "retweet":
+            pass  # Todo
     return Response({"message": "Tweet removed!"}, status=200)
 
 

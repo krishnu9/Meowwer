@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from meowws.views import (home_view, meoww_detail_view,
+from meowws.views import (home_view, meoww_detail_view, meoww_action_view,
                           meoww_list_view, meoww_create_view, meoww_delete_view)
 
 urlpatterns = [
@@ -24,5 +24,6 @@ urlpatterns = [
     path('create-meoww', meoww_create_view),
     path('meowws/', meoww_list_view),
     path('meowws/<int:meoww_id>', meoww_detail_view),
+    path('api/meowws/action', meoww_action_view),
     path('api/meowws/<int:meoww_id>/delete', meoww_delete_view),
 ]

@@ -67,7 +67,7 @@ def meoww_action_view(request, meoww_id, *args, **kwargs):
     id required
     action options: like, unlike, retweet
     '''
-    serializer = MeowwActionSerializer(request.POST)
+    serializer = MeowwActionSerializer(data=request.POST)
     if serializer.is_valid(raise_exception=True):
         data = serializer.validated_data
         meoww_id = data.get("id")

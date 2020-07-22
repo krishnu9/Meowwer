@@ -62,12 +62,12 @@ def meoww_delete_view(request, meoww_id, *args, **kwargs):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def meoww_action_view(request, meoww_id, *args, **kwargs):
+def meoww_action_view(request, *args, **kwargs):
     '''
     id required
     action options: like, unlike, retweet
     '''
-    serializer = MeowwActionSerializer(data=request.POST)
+    serializer = MeowwActionSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         data = serializer.validated_data
         meoww_id = data.get("id")
@@ -79,11 +79,13 @@ def meoww_action_view(request, meoww_id, *args, **kwargs):
         obj = qs.first()
         if action == "like":
             obj.likes.add(request.user)
+            serializer = MeowwSerializer(obj)
+            return Response(serializer.data, status=200)
         elif action == "unlike":
             obj.likes.remove(request.user)
         elif action == "retweet":
             pass  # Todo
-    return Response({"message": "Tweet removed!"}, status=200)
+    return Response({}, status=200)
 
 
 @api_view(['POST'])

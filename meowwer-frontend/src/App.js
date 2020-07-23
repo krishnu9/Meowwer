@@ -5,7 +5,7 @@ import "./App.css";
 function loadMews(callback) {
   const xhr = new XMLHttpRequest();
   const method = "GET";
-  const url = "http://127.0.0.1:8000/api/meowws";
+  const url = "http://localhost:8000/api/meowws/";
   const responseType = "json";
   xhr.responseType = responseType;
   xhr.open(method, url);

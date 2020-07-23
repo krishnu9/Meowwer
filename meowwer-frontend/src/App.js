@@ -18,12 +18,40 @@ function loadMews(callback) {
   };
   xhr.send();
 }
+
+function ActionBtn(props) {
+  const { mew, action } = props;
+  const className = props.className
+    ? props.className
+    : "btn btn-primary btn-sm";
+  return action.type === "like" ? (
+    <button className={className}>{mew.likes} Like</button>
+  ) : null;
+}
+
+function Mew(props) {
+  const mew = props.mew;
+  const className = props.className
+    ? props.className
+    : "col-10 mx-auto col-md-6";
+  return (
+    <div className={className}>
+      <p>
+        {mew.id} - {mew.content}
+      </p>
+      <div>
+        <ActionBtn mew={mew} action={{ type: "like" }} />
+        <ActionBtn mew={mew} action={{ type: "unlike" }} />
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [mews, setMews] = useState([]);
 
   useEffect(() => {
     const mycallback = (response, status) => {
-      console.log(response, status);
       if (status === 200) {
         setMews(response);
       } else {
@@ -40,11 +68,11 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <p>
+        <div>
           {mews.map((mew, index) => {
-            return <li>{mew.content}</li>;
+            return <Mew mew={mew} key={index} />;
           })}
-        </p>
+        </div>
         <a
           className="App-link"
           href="https://reactjs.org"

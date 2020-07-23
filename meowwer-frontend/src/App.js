@@ -2,12 +2,35 @@ import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
+function loadMews(callback) {
+  const xhr = new XMLHttpRequest();
+  const method = "GET";
+  const url = "http://127.0.0.1:8000/api/meowws";
+  const responseType = "json";
+  xhr.responseType = responseType;
+  xhr.open(method, url);
+  xhr.onload = function () {
+    callback(xhr.response, xhr.status);
+  };
+  xhr.onerror = function (e) {
+    console.log(e);
+    callback({ message: "The request was an error" }, 400);
+  };
+  xhr.send();
+}
 function App() {
   const [mews, setMews] = useState([]);
 
   useEffect(() => {
-    const mewItem = [{ content: 123 }, { content: 234 }];
-    setMews(mewItem);
+    const mycallback = (response, status) => {
+      console.log(response, status);
+      if (status === 200) {
+        setMews(response);
+      } else {
+        alert("There was an error");
+      }
+    };
+    loadMews(mycallback);
   }, []);
 
   return (

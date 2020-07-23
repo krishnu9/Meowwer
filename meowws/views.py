@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 from .forms import MeowwForm
 from .models import Meoww
-from .serializers import MeowwSerializer, MeowwActionSerializer
+from .serializers import MeowwSerializer, MeowwActionSerializer, MeowwCreateSerializer
 # Create your views here.
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
@@ -72,7 +72,7 @@ def meoww_action_view(request, *args, **kwargs):
         data = serializer.validated_data
         meoww_id = data.get("id")
         action = data.get("action")
-
+        content = data.get("content")
         qs = Meoww.objects.filter(id=meoww_id)
         if not qs.exists():
             return Response({}, status=404)
@@ -83,8 +83,11 @@ def meoww_action_view(request, *args, **kwargs):
             return Response(serializer.data, status=200)
         elif action == "unlike":
             obj.likes.remove(request.user)
-        elif action == "retweet":
-            pass  # Todo
+        elif action == "remeoww":
+            new_meoww = Meoww.objects.create(
+                user=request.user, parent=obj, content=content,)
+            serializer = MeowwSerializer(new_meoww)
+            return Response(serializer.data, status=200)
     return Response({}, status=200)
 
 
@@ -92,7 +95,7 @@ def meoww_action_view(request, *args, **kwargs):
 # @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def meoww_create_view(request, *args, **kwargs):
-    serializer = MeowwSerializer(data=request.POST)
+    serializer = MeowwCreateSerializer(data=request.POST)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return Response(serializer.data, status=201)

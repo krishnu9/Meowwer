@@ -1,7 +1,8 @@
-import {ActionBtn, Mew, MewList} from './components'
+import {ActionBtn, Mew, MewList, MewsComponent} from './components'
 
 export {
     ActionBtn,
     Mew,
-    MewList
+    MewList,
+    MewsComponent
 }

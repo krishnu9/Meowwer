@@ -1,6 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { loadMews } from '../lookup'
 
+export function MewsComponent(props) {
+    const textAreaRef = React.createRef();
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const newVal = textAreaRef.current.value
+        textAreaRef.current.value = ""
+    }
+    return <div className={props.className}>
+        <div className='col-12 mb-3'>
+        <form onSubmit={handleSubmit}>
+            <textarea ref={textAreaRef} required={true} className="form-control">
+            </textarea>
+            <button type="submit" className='btn btn-primary my-3'>Mew</button>
+        </form>
+    </div>
+    <MewList/>
+    </div>
+}
+
 export function MewList(props) {
     const [mews, setMews] = useState([]);
 

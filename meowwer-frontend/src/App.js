@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "./logo.svg";
-import {MewList} from './mews'
+import {MewsComponent} from './mews'
 import "./App.css";
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <div>
-          <MewList/>
+          <MewsComponent/>
         </div>
         <a
           className="App-link"

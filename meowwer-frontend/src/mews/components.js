@@ -3,9 +3,17 @@ import { loadMews } from '../lookup'
 
 export function MewsComponent(props) {
     const textAreaRef = React.createRef();
+    const [newMews, setNewMews] = useState([]);
     const handleSubmit = (event) => {
         event.preventDefault();
         const newVal = textAreaRef.current.value
+        let tempNewMews = [...newMews]
+        tempNewMews.unshift({
+            content: newVal,
+            likes: 0,
+            id: 123123
+        })
+        setNewMews(tempNewMews)
         textAreaRef.current.value = ""
     }
     return <div className={props.className}>
@@ -16,23 +24,29 @@ export function MewsComponent(props) {
             <button type="submit" className='btn btn-primary my-3'>Mew</button>
         </form>
     </div>
-    <MewList/>
+    <MewList newMews={newMews}/>
     </div>
 }
 
 export function MewList(props) {
+    const [mewsInit, setMewsInit] = useState([]);
     const [mews, setMews] = useState([]);
-
+    useEffect(() => {
+        const final = [...props.newMews].concat(mewsInit)
+        if (final.length !== mews.length) {
+            setMews(final)
+        }
+    }, [props.newMews, mews, mewsInit])
     useEffect(() => {
         const mycallback = (response, status) => {
             if (status === 200) {
-                setMews(response);
+                setMewsInit(response);
             } else {
                 alert("There was an error");
             }
         };
         loadMews(mycallback);
-    }, []);
+    }, [mewsInit]);
 
     return mews.map((mew, index) => {
         return <Mew mew={mew} key={index} />;

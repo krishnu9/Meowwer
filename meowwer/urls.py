@@ -24,7 +24,7 @@ from meowws.views import (home_view, meoww_detail_view, meoww_action_view,
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view),
-    path('react/', TemplateView.as_view(template_name='react.html')),
+    path('react/', TemplateView.as_view(template_name='react_via_dj.html')),
     path('create-meoww', meoww_create_view),
     path('meowws/', meoww_list_view),
     path('meowws/<int:meoww_id>', meoww_detail_view),
